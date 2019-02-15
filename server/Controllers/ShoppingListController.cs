@@ -12,18 +12,27 @@ namespace GrokGroceries.Controllers
     [ApiController]
     public class ShoppingListController : ControllerBase
     {
-        private ShoppingList list = ShoppingList.Instance;
+        private DataService data = DataService.Instance;
 
         [HttpGet]
-        public ActionResult<IEnumerable<ShoppingListEntry>> Get()
+        public ActionResult<ShoppingList> Get()
         {
-            return list.GetAll();
+            return data.GetAll();
         }
 
         [HttpPost]
+        [ProducesResponseType(201)]
         public ActionResult<ShoppingListEntry> AddEntry([FromBody] string name)
         {
-            return list.AddEntry(name);
+            return Created(String.Empty, data.AddEntry(name));
+        }
+
+        [HttpPost("complete")]
+        [ProducesResponseType(201)]
+        public ActionResult<string> Complete([FromQuery] Guid uuid)
+        {
+            data.CompleteEntry(uuid);
+            return Created(String.Empty, "done");
         }
 
         // GET api/values/5
