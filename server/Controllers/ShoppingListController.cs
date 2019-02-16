@@ -35,29 +35,13 @@ namespace GrokGroceries.Controllers
             return Created(String.Empty, "done");
         }
 
-        // GET api/values/5
-        // [HttpGet("{id}")]
-        // public ActionResult<string> Get(int id)
-        // {
-        //     return "value";
-        // }
+        [HttpPost("uncomplete")]
+        [ProducesResponseType(201)]
+        public ActionResult<string> Uncomplete([FromQuery] Guid uuid)
+        {
+            data.UncompleteEntry(uuid);
+            return Created(String.Empty, "done");
+        }
 
-        // // POST api/values
-        // [HttpPost]
-        // public void Post([FromBody] string value)
-        // {
-        // }
-
-        // // PUT api/values/5
-        // [HttpPut("{id}")]
-        // public void Put(int id, [FromBody] string value)
-        // {
-        // }
-
-        // // DELETE api/values/5
-        // [HttpDelete("{id}")]
-        // public void Delete(int id)
-        // {
-        // }
     }
 }

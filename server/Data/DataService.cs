@@ -76,6 +76,19 @@ namespace GrokGroceries.Data
             list.CompletedEntries.Insert(0, entry);
         }
 
+        public void UncompleteEntry(Guid entryUuid)
+        {
+            var index = list.CompletedEntries.FindIndex(e => e.Uuid == entryUuid);
+            if (index == -1)
+            {
+                return;
+            }
+            ShoppingListEntry entry = list.CompletedEntries[index];
+            list.CompletedEntries.RemoveAt(index);
+
+            list.Entries.Add(entry);
+        }
+
         // Yay for prototypes!
         private static DataService instance;
         public static DataService Instance
