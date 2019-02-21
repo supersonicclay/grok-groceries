@@ -4,6 +4,14 @@
     <div v-for="entry of list.entries" :key="entry.uuid" @click="completeEntry(entry.uuid)">
       <!-- <td><input type="checkbox" /></td> -->
       {{entry.item.name}}
+      <span v-if="entry.quantity > 1">({{entry.quantity}})</span>
+    </div>
+
+    <div>
+      <form @submit.prevent="addEntry">
+        <input type="text" v-model="newEntryText">
+        <button type="submit">Add</button>
+      </form>
     </div>
 
     <div v-if="list.completedEntries.length">
@@ -16,7 +24,10 @@
         :key="entry.uuid"
         @click="uncompleteEntry(entry.uuid)"
       >
-        <span style="color:red">{{entry.item.name}}</span>
+        <span style="color:red">
+          {{entry.item.name}}
+          <span v-if="entry.quantity > 1">({{entry.quantity}})</span>
+        </span>
       </div>
     </div>
   </div>
@@ -44,18 +55,26 @@ export default class ShoppingList extends Vue {
     entries: [],
     completedEntries: []
   };
+  newEntryText: string = "";
 
   async created() {
     await this.refreshList();
     this.loading = false;
   }
 
-  addEntry({ name }: { name: string }) {
-    // const newItem = {
-    //   uuid: 'todo',
-    //   name,
-    // };
-    // this.items = [...this.items, newItem];
+  async addEntry() {
+    const newItemResponse = await fetch("/api/v1/shopping-list", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(this.newEntryText)
+    });
+    const newItem = await newItemResponse.json();
+
+    this.newEntryText = "";
+
+    await this.refreshList();
   }
 
   async refreshList() {

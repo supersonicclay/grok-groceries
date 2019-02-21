@@ -24,6 +24,10 @@ namespace GrokGroceries.Controllers
         [ProducesResponseType(201)]
         public ActionResult<ShoppingListEntry> AddEntry([FromBody] string name)
         {
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Must supply a name");
+            }
             return Created(String.Empty, data.AddEntry(name));
         }
 
