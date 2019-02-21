@@ -82,6 +82,10 @@ export default class ShoppingList extends Vue {
   }
 
   async clearCompletedEntries() {
+    if (!confirm("Are you sure you want to clear all completed items?")) {
+      return;
+    }
+
     await fetch(`/api/v1/shopping-list/clear-completed`, {
       method: "POST"
     });
