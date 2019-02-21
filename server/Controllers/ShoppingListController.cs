@@ -43,5 +43,13 @@ namespace GrokGroceries.Controllers
             return Created(String.Empty, "done");
         }
 
+        [HttpPost("clear-completed")]
+        [ProducesResponseType(201)]
+        public ActionResult<string> ClearCompleted()
+        {
+            data.ClearCompletedEntries();
+            return Created(String.Empty, "done");
+        }
+
     }
 }

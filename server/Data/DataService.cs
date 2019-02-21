@@ -89,6 +89,11 @@ namespace GrokGroceries.Data
             list.Entries.Add(entry);
         }
 
+        public void ClearCompletedEntries()
+        {
+            list.CompletedEntries.Clear();
+        }
+
         // Yay for prototypes!
         private static DataService instance;
         public static DataService Instance

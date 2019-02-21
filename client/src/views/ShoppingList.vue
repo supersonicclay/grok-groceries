@@ -6,14 +6,18 @@
       {{entry.item.name}}
     </div>
 
-    <h3 v-if="list.completedEntries.length">Completed</h3>
-    <div
-      v-for="entry of list.completedEntries"
-      :key="entry.uuid"
-      @click="uncompleteEntry(entry.uuid)"
-    >
-      <!-- <td><input type="checkbox" /></td> -->
-      <span style="color:red">{{entry.item.name}}</span>
+    <div v-if="list.completedEntries.length">
+      <h3>Completed</h3>
+      <div>
+        <button @click="clearCompletedEntries">Clear completed</button>
+      </div>
+      <div
+        v-for="entry of list.completedEntries"
+        :key="entry.uuid"
+        @click="uncompleteEntry(entry.uuid)"
+      >
+        <span style="color:red">{{entry.item.name}}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +75,14 @@ export default class ShoppingList extends Vue {
 
   async uncompleteEntry(uuid: string) {
     await fetch(`/api/v1/shopping-list/uncomplete?uuid=${uuid}`, {
+      method: "POST"
+    });
+
+    await this.refreshList();
+  }
+
+  async clearCompletedEntries() {
+    await fetch(`/api/v1/shopping-list/clear-completed`, {
       method: "POST"
     });
 
